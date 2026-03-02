@@ -77,9 +77,9 @@ def main(train_imgs_np_file, train_masks_np_file, output_weights_file, pretraine
     train_masks_cat = to_categorical(train_masks, num_classes)
 
     if use_weighted_crossentropy:
-        model.compile(optimizer=Adam(lr=(learn_rate)), loss=weighted_categorical_crossentropy(class_weights))
+        model.compile(optimizer=Adam(learning_rate=learn_rate), loss=weighted_categorical_crossentropy(class_weights))
     else:
-        model.compile(optimizer=Adam(lr=(learn_rate)), loss='categorical_crossentropy')
+        model.compile(optimizer=Adam(learning_rate=learn_rate), loss='categorical_crossentropy')
 
     current_epoch = 1
     history = {}

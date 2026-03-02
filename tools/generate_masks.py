@@ -2,6 +2,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import click
 import numpy as np
 import SimpleITK as sitk
 
@@ -70,17 +71,21 @@ def gen_masks(model, input_img_fold, flair = False, t1 = False, normilize=True, 
     return masks
 
 
-def main():
-    input_img_fold = 'data/Utrecht/images'
-    output_mask_fold = 'data/Utrecht/masks'
-    pretrained_model = 'pretrained_models/weights_dru32.h5'
-    img_shape = (240, 240, 2)
-    num_classes = 9
+@click.command()
+@click.argument('input_img_fold', type=click.Path(exists=True))
+@click.argument('output_mask_fold', type=click.Path(exists=True))
+@click.argument('pretrained_model', type=click.Path(exists=True))
+@click.option('--img_width', default=240, type=int, help='Image width')
+@click.option('--img_height', default=240, type=int, help='Image height')
+@click.option('--num_channels', default=2, type=int, help='Number of input channels')
+@click.option('--num_classes', default=9, type=int, help='Number of segmentation classes')
+@click.option('--flair/--no-flair', default=True, help='Use FLAIR images')
+@click.option('--t1/--no-t1', default=True, help='Use T1 images')
+def main(input_img_fold, output_mask_fold, pretrained_model, img_width, img_height, num_channels, num_classes, flair, t1):
+    img_shape = (img_width, img_height, num_channels)
     model = get_model(img_shape=img_shape, num_classes=num_classes)
     model.load_weights(pretrained_model)
-    masks = gen_masks(model, input_img_fold, flair=True, t1=True, normilize=True, output_masks_fold=output_mask_fold)
-
-    return 0
+    masks = gen_masks(model, input_img_fold, flair=flair, t1=t1, normilize=True, output_masks_fold=output_mask_fold)
 
 
 if __name__ == '__main__':

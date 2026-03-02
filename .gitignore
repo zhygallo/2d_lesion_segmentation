@@ -1,4 +1,5 @@
 *.pyc
+__pycache__/
 *.npy
 *.csv
 *.hdf5
@@ -8,3 +9,9 @@
 *.json
 *.gz
 *.tar
+
+# Allow README images
+!assets/*.png
+
+# IDE
+.idea/

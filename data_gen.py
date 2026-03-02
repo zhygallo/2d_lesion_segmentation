@@ -78,21 +78,21 @@ def get_2d_patches(input_fold, test_img='', drop_class = [], crop_shape=None,
 
         img = None
         if flair:
-            flair_img = nib.load(os.path.join(input_fold, 'images/FLAIR/' + img_file.split('_')[0]+'_FLAIR.nii')).get_data()
+            flair_img = nib.load(os.path.join(input_fold, 'images/FLAIR/' + img_file.split('_')[0]+'_FLAIR.nii')).get_fdata()
             flair_img = np.nan_to_num(flair_img)
             flair_img = flair_img.astype('float32')
             flair_img = prep_img(flair_img, crop_shape=crop_shape, normilize=normilize_per_case)
             flair_img = flair_img[..., np.newaxis]
             img = flair_img
         if t1:
-            t1_img = nib.load(os.path.join(input_fold, 'images/T1/' + img_file.split('_')[0]+'_T1.nii')).get_data()
+            t1_img = nib.load(os.path.join(input_fold, 'images/T1/' + img_file.split('_')[0]+'_T1.nii')).get_fdata()
             t1_img = np.nan_to_num(t1_img)
             t1_img = t1_img.astype('float32')
             t1_img = prep_img(t1_img, crop_shape=crop_shape, normilize=normilize_per_case)
             t1_img = t1_img[..., np.newaxis]
             img = t1_img
         if ir:
-            ir_img = nib.load(os.path.join(input_fold, 'images/IR/' + img_file.split('_')[0] + '_IR.nii')).get_data()
+            ir_img = nib.load(os.path.join(input_fold, 'images/IR/' + img_file.split('_')[0] + '_IR.nii')).get_fdata()
             ir_img = np.nan_to_num(ir_img)
             ir_img = ir_img.astype('float32')
             ir_img = prep_img(ir_img, crop_shape=crop_shape, normilize=normilize_per_case)
@@ -108,7 +108,7 @@ def get_2d_patches(input_fold, test_img='', drop_class = [], crop_shape=None,
         elif t1 and ir:
             img = np.concatenate((t1_img, ir_img), axis=3)
 
-        mask = nib.load(os.path.join(input_fold, 'masks/' + img_file.split('_')[0] + '_mask.nii')).get_data()
+        mask = nib.load(os.path.join(input_fold, 'masks/' + img_file.split('_')[0] + '_mask.nii')).get_fdata()
         mask = np.nan_to_num(mask)
         mask = prep_img(mask, crop_shape=crop_shape, normilize=False)
 
